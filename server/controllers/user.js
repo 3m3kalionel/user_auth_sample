@@ -93,4 +93,44 @@ export default class User {
       message: 'Check your email for a password reset link'
     });
   }
+
+  static async resetPassword (req, res) {
+    const { resetToken, password, confirmPassword } = req.body;
+    if (password !== confirmPassword) {
+      return res.status(400).json({
+        error: 'Passwords do not match'
+      })
+    }
+    const decoded = await jwt.verify(
+      resetToken,
+      process.env.APP_SECRET,
+      async (error, decodedValue) => {
+        if (error && error.message) {
+          return res.status(400).json({
+            error: 'Password reset link is either invalid or expired!'
+          })
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        let user = await userModel.findByIdAndUpdate(
+          decodedValue.userId,
+          {
+            password: hashedPassword
+          },
+          {
+            new: true,
+          }
+        );
+
+        let updatedUser = user.toObject();
+        delete updatedUser.password;
+
+        
+        return res.status(200).json({
+          message: 'Password updated!',
+          user: updatedUser,
+        });
+        
+      });
+  }
 }
