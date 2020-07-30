@@ -1,0 +1,43 @@
+{
+  "name": "user_auth_sample",
+  "version": "1.0.0",
+  "description": "user authentication sample",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon ./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/3m3kalionel/user_auth_sample.git"
+  },
+  "keywords": [
+    "login",
+    "signup",
+    "password_reset"
+  ],
+  "author": "3m3ka/dev_2.0",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/3m3kalionel/user_auth_sample/issues"
+  },
+  "homepage": "https://github.com/3m3kalionel/user_auth_sample#readme",
+  "dependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.4.13",
+    "mongoose-beautiful-unique-validation": "^7.1.1",
+    "nodemailer": "^6.4.11"
+  },
+  "devDependencies": {
+    "eslint": "^7.2.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "nodemon": "^2.0.4"
+  }
+}
