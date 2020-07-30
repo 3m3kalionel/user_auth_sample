@@ -8,6 +8,9 @@ const router = app => {
 
     // route that retrieves a user
     app.get('/api/v1/user/signin', userController.signIn);
+
+    // route that sends password reset email
+    app.post('/api/v1/user/forgotPassword', userController.requestResetPasswordLink);
 }
 
 export default router;

@@ -4,6 +4,8 @@ import jwt from 'jsonwebtoken';
 import userModel from '../models/userModel';
 import { 
   handleError,
+  createMailResetTemplate,
+  sendMail
 } from '../utils';
 
 export default class User {
@@ -65,6 +67,30 @@ export default class User {
     return res.status(200).json({
       user,
       token
+    });
+  }
+
+  static async requestResetPasswordLink(req, res) {
+    const { recipientEmail } = req.body;
+    const foundUser = await userModel.findOne(
+      { email: recipientEmail }
+    );
+    if (!foundUser) {
+      return res.status(404).send({ error: 'user not found' })
+    }
+
+    const passwordResetToken = jwt.sign(
+      { email: recipientEmail, userId: foundUser.id },
+      process.env.APP_SECRET,
+      { expiresIn: 180 },
+    );
+
+    let mailResetTemplate = createMailResetTemplate(foundUser.username, process.env.FRONTEND_URL_DEV, passwordResetToken);
+    
+    await sendMail(recipientEmail, 'password reset link', mailResetTemplate);
+    await sendMail(process.env.RECIPIENT_EMAIL, 'password reset link', mailResetTemplate);
+    return res.status(200).json({
+      message: 'Check your email for a password reset link'
     });
   }
 }
