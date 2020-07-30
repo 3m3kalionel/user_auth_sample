@@ -11,6 +11,9 @@ const router = app => {
 
     // route that sends password reset email
     app.post('/api/v1/user/forgotPassword', userController.requestResetPasswordLink);
+
+    // route that updates a user's password
+    app.post('/api/v1/user/resetPassword', userController.resetPassword);
 }
 
 export default router;
