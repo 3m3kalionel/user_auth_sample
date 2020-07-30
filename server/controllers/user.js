@@ -39,4 +39,32 @@ export default class User {
       }
     )
   }
+
+  static async signIn(req, res) {
+    const { email, password } = req.body
+    const foundUser = await userModel.findOne({ email }, '-__v');
+
+    if (!foundUser) {
+      return res.status(404).send({ error: 'user not found' })
+    }
+    const isValidPassword = await bcrypt.compare(password, foundUser.password);
+    if (!isValidPassword) {
+      return res.status(400).json({
+        error: 'Username and password don\'t match'
+      })
+    };
+    const token = jwt.sign(
+      { userId: foundUser.id },
+      process.env.APP_SECRET,
+      {
+        expiresIn: 120,
+      }
+    );
+    const user = foundUser.toObject();
+    delete user.password;
+    return res.status(200).json({
+      user,
+      token
+    });
+  }
 }
